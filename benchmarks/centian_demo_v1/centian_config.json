@@ -12,12 +12,12 @@
     "capabilities": {
       "taskVerification": {
         "enabled": true,
-        "templatesPath": "__TEMPLATES_DIR__"
+        "templatesPath": "~/projects/centian-benchmarks/task-templates"
       },
       "eventStorage": {
         "enabled": true,
         "driver": "sqlite",
-        "path": "__EVENT_STORE_PATH__"
+        "path": "~/projects/centian-benchmarks/benchmarks/centian_demo_v1/results/20260412_working_events.sqlite"
       },
       "ui": {
         "enabled": true
@@ -28,6 +28,7 @@
     "taskverification": {
       "setupGateway": true,
       "forceReadOnlyHints": true,
+      "forceSafeToolHints": true,
       "mcpServers": {
         "filesystem": {
           "command": "npx",

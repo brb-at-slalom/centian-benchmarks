@@ -2,13 +2,12 @@
 
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
-
-CENTIAN_BIN="${CENTIAN_BIN:-${REPO_ROOT}/build/centian}"
-SUITE_PATH="${SUITE_PATH:-${REPO_ROOT}/tests/integrationtests/taskverification/benchmarks/centian_demo_v1}"
+CENTIAN_BIN="${CENTIAN_BIN:-$(command -v centian || true)}"
+SUITE_PATH="${SUITE_PATH:-tests/integrationtests/taskverification/benchmarks/centian_demo_v1}"
 REPEAT="${REPEAT:-10}"
 CODEX_CONFIG_PATH="${CODEX_CONFIG_PATH:-}"
+CENTIAN_CONFIG_PATH="${CENTIAN_CONFIG_PATH:-}"
+TEMPLATE_DIRS="${TEMPLATE_DIRS:-}"
 
 run_scenario() {
   local label="$1"
@@ -29,8 +28,17 @@ run_scenario() {
     --repeat "${REPEAT}"
   )
 
-  if [[ "${agent}" == "codex" && -n "${CODEX_CONFIG_PATH}" ]]; then
+  if [[ ( "${agent}" == "codex" || "${agent}" == "codex-ollama" ) && -n "${CODEX_CONFIG_PATH}" ]]; then
     cmd+=(--codex-config "${CODEX_CONFIG_PATH}")
+  fi
+  if [[ -n "${CENTIAN_CONFIG_PATH}" ]]; then
+    cmd+=(--centian-config "${CENTIAN_CONFIG_PATH}")
+  fi
+  if [[ -n "${TEMPLATE_DIRS}" ]]; then
+    IFS=',' read -r -a template_dirs <<< "${TEMPLATE_DIRS}"
+    for template_dir in "${template_dirs[@]}"; do
+      [[ -n "${template_dir}" ]] && cmd+=(--template-dir "${template_dir}")
+    done
   fi
 
   "${cmd[@]}"
@@ -39,7 +47,7 @@ run_scenario() {
 }
 
 if [[ ! -x "${CENTIAN_BIN}" ]]; then
-  echo "error: centian binary not found or not executable at ${CENTIAN_BIN}" >&2
+echo "error: centian binary not found or not executable at ${CENTIAN_BIN}" >&2
   exit 1
 fi
 
@@ -48,7 +56,6 @@ if [[ ! -d "${SUITE_PATH}" ]]; then
   exit 1
 fi
 
-echo "Repo root: ${REPO_ROOT}"
 echo "Centian binary: ${CENTIAN_BIN}"
 echo "Suite: ${SUITE_PATH}"
 echo "Repeat count: ${REPEAT}"
@@ -60,14 +67,22 @@ else
   echo "      The codex scenarios below use the selected model only."
   echo "      If you want Codex 'high', set CODEX_CONFIG_PATH to a base Codex config that already carries it."
 fi
+if [[ -n "${CENTIAN_CONFIG_PATH}" ]]; then
+  echo "Centian config: ${CENTIAN_CONFIG_PATH}"
+fi
+if [[ -n "${TEMPLATE_DIRS}" ]]; then
+  echo "Template dirs: ${TEMPLATE_DIRS}"
+fi
 
-run_scenario "claude / haiku" "claude" "haiku"
-run_scenario "gemini / gemini-3.1-pro-preview" "gemini" "gemini-3.1-pro-preview"
-run_scenario "gemini / gemini-3-flash-preview" "gemini" "gemini-3-flash-preview"
-run_scenario "codex / gpt-5.4" "codex" "gpt-5.4"
-run_scenario "codex / gpt-5.4-mini" "codex" "gpt-5.4-mini"
-run_scenario "claude / sonnet" "claude" "sonnet"
-run_scenario "claude / opus" "claude" "opus"
+#run_scenario "claude / haiku" "claude" "haiku"
+#run_scenario "gemini / gemini-3.1-pro-preview" "gemini" "gemini-3.1-pro-preview"
+# run_scenario "gemini / gemini-3-flash-preview" "gemini" "gemini-3-flash-preview"
+#run_scenario "codex / gpt-5.4" "codex" "gpt-5.4"
+# run_scenario "codex / gpt-5.4-mini" "codex" "gpt-5.4-mini"
+# run_scenario "claude / sonnet" "claude" "sonnet"
+#run_scenario "claude / opus" "claude" "opus"
+#run_scenario "codex-ollama / opus" "codex-ollama" "gemma4-local"
+run_scenario "codex-ollama / opus" "codex-ollama" "qwen35-local"
 
 echo
 echo "All benchmark scenarios finished."

@@ -1,20 +1,20 @@
 sandbox_mode = "read-only"
-oss_provider = "ollama"
+oss_provider = "ollama-custom"
 
-[model_providers.ollama]
+[model_providers.ollama-custom]
 name = "Ollama"
 base_url = "http://localhost:11434/v1"
 
 [profiles.gemma4-local]
-model_provider = "ollama"
-model = "gemma4:26b"
+model_provider = "ollama-custom"
+model = "gemma4-64k"
 
-[profiles.qwen3.5-local]
-model_provider = "ollama"
-model = "qwen3.5:32b"
+[profiles.qwen35-local]
+model_provider = "ollama-custom"
+model = "qwen3-64k"
 
 [apps._default]
 enabled = true
-destructive_enabled = false
-open_world_enabled = false
-default_tools_approval_mode = "auto"
+destructive_enabled = true
+open_world_enabled = true
+default_tools_approval_mode = "approve"
