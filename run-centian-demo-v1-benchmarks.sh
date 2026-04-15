@@ -26,6 +26,7 @@ run_scenario() {
     --agent "${agent}"
     --model "${model}"
     --repeat "${REPEAT}"
+    --timeout 30m
   )
 
   if [[ ( "${agent}" == "codex" || "${agent}" == "codex-ollama" ) && -n "${CODEX_CONFIG_PATH}" ]]; then
@@ -83,11 +84,12 @@ fi
 
 #run_scenario "gemini / gemini-3.1-pro-preview" "gemini" "gemini-3.1-pro-preview"
 #run_scenario "gemini / gemini-3-flash-preview" "gemini" "gemini-3-flash-preview"
-#run_scenario "codex / gpt-5.4" "codex" "gpt-5.4"
 
+#run_scenario "codex / gpt-5.4" "codex" "gpt-5.4"
 #run_scenario "codex / gpt-5.4-mini" "codex" "gpt-5.4-mini"
-#run_scenario "codex-ollama / opus" "codex-ollama" "gemma4-local"
-run_scenario "codex-ollama / opus" "codex-ollama" "qwen35-local"
+
+#run_scenario "codex-ollama / gemma4" "codex-ollama" "gemma4-local"
+run_scenario "codex-ollama / qwen35" "codex-ollama" "qwen35-local"
 
 echo
 echo "All benchmark scenarios finished."
