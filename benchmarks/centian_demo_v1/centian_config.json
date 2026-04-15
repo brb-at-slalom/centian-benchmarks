@@ -12,12 +12,12 @@
     "capabilities": {
       "taskVerification": {
         "enabled": true,
-        "templatesPath": "~/projects/centian-benchmarks/task-templates"
+        "templatesPath": "./task-templates"
       },
       "eventStorage": {
         "enabled": true,
         "driver": "sqlite",
-        "path": "~/projects/centian-benchmarks/benchmarks/centian_demo_v1/results/20260412_working_events.sqlite"
+        "path": "./results/20260413_target.sqlite"
       },
       "ui": {
         "enabled": true
