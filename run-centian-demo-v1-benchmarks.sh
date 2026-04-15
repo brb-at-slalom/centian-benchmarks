@@ -74,13 +74,18 @@ if [[ -n "${TEMPLATE_DIRS}" ]]; then
   echo "Template dirs: ${TEMPLATE_DIRS}"
 fi
 
+## Below are possible benchmark scenarios - they are commented out, to avoid running all 
+## benchmarks at once, possibly exhausting usage quota and/or causing high cost
+
 #run_scenario "claude / haiku" "claude" "haiku"
-#run_scenario "gemini / gemini-3.1-pro-preview" "gemini" "gemini-3.1-pro-preview"
-# run_scenario "gemini / gemini-3-flash-preview" "gemini" "gemini-3-flash-preview"
-#run_scenario "codex / gpt-5.4" "codex" "gpt-5.4"
-# run_scenario "codex / gpt-5.4-mini" "codex" "gpt-5.4-mini"
-# run_scenario "claude / sonnet" "claude" "sonnet"
+#run_scenario "claude / sonnet" "claude" "sonnet"
 #run_scenario "claude / opus" "claude" "opus"
+
+#run_scenario "gemini / gemini-3.1-pro-preview" "gemini" "gemini-3.1-pro-preview"
+#run_scenario "gemini / gemini-3-flash-preview" "gemini" "gemini-3-flash-preview"
+#run_scenario "codex / gpt-5.4" "codex" "gpt-5.4"
+
+#run_scenario "codex / gpt-5.4-mini" "codex" "gpt-5.4-mini"
 #run_scenario "codex-ollama / opus" "codex-ollama" "gemma4-local"
 run_scenario "codex-ollama / opus" "codex-ollama" "qwen35-local"
 
