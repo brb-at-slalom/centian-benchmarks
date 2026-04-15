@@ -1,4 +1,9 @@
 sandbox_mode = "read-only"
+# oss_provider = "ollama-cloud"
+
+[profiles.glm_5_1]
+model_provider = "ollama"
+model = "glm-5.1:cloud"
 
 [apps._default]
 enabled = true

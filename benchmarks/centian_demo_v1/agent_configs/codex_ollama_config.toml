@@ -9,6 +9,14 @@ base_url = "http://localhost:11434/v1"
 model_provider = "ollama-custom"
 model = "gemma4-64k"
 
+[profiles.gemma4-small]
+model_provider = "ollama-custom"
+model = "gemma4_26b_32k"
+
+[profiles.gemma4-big]
+model_provider = "ollama-custom"
+model = "gemma4_31b_128k"
+
 [profiles.qwen35-local]
 model_provider = "ollama-custom"
 model = "qwen3-64k"
