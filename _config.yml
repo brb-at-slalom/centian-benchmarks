@@ -17,14 +17,10 @@ aux_links:
     - "https://github.com/T4cceptor/centian-benchmarks"
 
 aux_links_new_tab: true
-
 heading_anchors: true
-
-nav_enabled: true
-
+nav_enabled: false
 back_to_top: true
 back_to_top_text: "Back to top"
-
 footer_content: "Centian &mdash; Open-source MCP proxy for AI agent governance. <a href=\"https://github.com/T4cceptor/centian\">GitHub</a>"
 
 # Search
