@@ -282,7 +282,7 @@ Local open-source models are closer to production-ready than most people assume.
  
 Ninety runs. Nine models. One governed workflow. The results are clear on the surface — flagship models dominate — but the deeper patterns are what matter.
  
-**Process compliance is an independent axis from coding capability.** qwen3.5 proved this definitively: 10 out of 10 correct implementations, 20% success rate. A model that can write perfect code but refuses to follow a governed process is not production-ready, no matter how good its output looks. Without structural enforcement, every one of those runs would have been marked as a success.
+**Process compliance is an independent axis from coding capability.** qwen3.5 proved this definitively: 8 out of 10 correct implementations, 20% success rate. A model that can write perfect code but refuses to follow a governed process is not production-ready, no matter how good its output looks. Without structural enforcement, every one of those runs would have been marked as a success.
  
 **The middle tier is where the interesting tradeoffs live.** gpt-5.4-mini matched flagships on success while being the fastest and cheapest — at the cost of efficiency. Claude Haiku never failed but rarely got it right the first time. Gemini Flash called tools flawlessly but stumbled on process governance. Each model has a profile that suits different use cases, and these profiles only become visible under structured evaluation.
  
