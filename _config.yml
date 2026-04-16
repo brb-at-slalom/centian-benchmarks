@@ -1,0 +1,46 @@
+title: Centian Agent Benchmarks
+description: "\"Done!\" — But Did Your Agent Actually Do the Work?"
+url: https://t4cceptor.github.io
+baseurl: /centian-benchmarks
+
+remote_theme: just-the-docs/just-the-docs@v0.10.0
+
+color_scheme: dark
+
+permalink: pretty
+
+aux_links:
+  "Centian on GitHub":
+    - "https://github.com/T4cceptor/centian"
+  "Benchmark Data":
+    - "https://github.com/T4cceptor/centian-benchmarks"
+
+aux_links_new_tab: true
+
+heading_anchors: true
+
+nav_enabled: true
+
+back_to_top: true
+back_to_top_text: "Back to top"
+
+footer_content: "Centian &mdash; Open-source MCP proxy for AI agent governance. <a href=\"https://github.com/T4cceptor/centian\">GitHub</a>"
+
+# Search
+search_enabled: true
+search:
+  heading_level: 2
+  previews: 3
+
+# Table of Contents
+toc:
+  enabled: true
+
+exclude:
+  - README.md
+  - LICENSE
+  - Gemfile
+  - Gemfile.lock
+  - "*.sqlite"
+  - data/
+  - configs/
