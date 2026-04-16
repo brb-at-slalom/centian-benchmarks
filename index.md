@@ -67,7 +67,7 @@ Across all 90 runs:
 <div align="center">
   <img
     src="benchmarks/centian_demo_v1/assets/images/centian_benchmark_tdd_overview.jpeg"
-    alt="TDD Bench Overview" width="80%"
+    alt="TDD Bench Overview" width="95%"
   />
   <p><em>Template Scorecards — all runs for the guided TDD workflow.</em></p>
 </div>
@@ -83,7 +83,7 @@ The most straightforward metric — but an important caveat upfront: time is mea
 <div align="center">
   <img
     src="benchmarks/centian_demo_v1/assets/images/centian_bench_med_time.jpeg"
-    alt="Median Time" width="80%"
+    alt="Median Time" width="95%"
   />
   <p><em>Agent Scorecards — sorted by median time.</em></p>
 </div>
@@ -118,7 +118,7 @@ MCP events split into two categories: Centian events (process-related calls like
 <div align="center">
   <img
     src="benchmarks/centian_demo_v1/assets/images/centian_bench_events.jpeg"
-    alt="Total Events" width="80%"
+    alt="Total Events" width="95%"
   />
   <p><em>Agent Scorecards — sorted by total events.</em></p>
 </div>
@@ -161,7 +161,7 @@ Errors split the same way as events: Centian errors (process violations — wron
 <div align="center">
   <img
     src="benchmarks/centian_demo_v1/assets/images/centian_bench_errors.jpeg"
-    alt="Total Events" width="80%"
+    alt="Total Events" width="95%"
   />
   <p><em>Agent Scorecards — sorted by total errors.</em></p>
 </div>
@@ -202,7 +202,7 @@ Now we will see: **being able to code is not the same as being able to follow a 
 <div align="center">
   <img
     src="benchmarks/centian_demo_v1/assets/images/centian_bench_firstpass.jpeg"
-    alt="Total Events" width="80%"
+    alt="Total Events" width="95%"
   />
   <p><em>Agent Scorecards — sorted by first pass.</em></p>
 </div>
