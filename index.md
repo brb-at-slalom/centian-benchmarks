@@ -223,19 +223,13 @@ This is expected — but it's worth pausing on. These models didn't just write c
 
 ### The bottom: where Capability ≠ Compliance becomes concrete
 
-This is where the benchmark gets interesting. The two local open-source models — gemma4 and qwen3.5 — scored 30% and 20% respectively. At first glance, that looks like a capability gap.
+This is where the benchmark gets interesting. The two local open-source models — gemma4 and qwen3.5 — scored 30% and 20% respectively. At first glance, that looks like a capability gap. It isn't. Both models can code. What they can't do — yet — is follow a governed process.
 
-It isn't - both models can code.
+**gemma4** (30% success, 30% first pass) presents a more nuanced picture than the raw numbers suggest. It always created valid scaffolding — every run produced compilable, runnable code structure. In the 5 runs where it succeeded at implementation, the tests were notably sophisticated — sometimes approaching the quality of flagship models like Opus. The failures weren't in the scaffolding or in the general ability to write code. They showed up specifically when translating the planned test (declared during the planning phase) into an actual working test during execution. In multiple runs, gemma4 modified the test file during the "Implement solution" step — triggering Centian's invariant check and failing the run. This suggests a planning-to-execution capability gap: the model can declare a plan and it can write code, but reliably bridging the two under the governed workflow is where it breaks. Looking at the reasoning logs, the model appeared to confuse itself across longer runs — likely compounded by the 64K context window limit and potential memory pressure on consumer hardware (MacBook M4, 48GB). Some runs entered loops of process errors where the model was clearly attempting to follow the workflow but lacked the reasoning depth or context to recover.
 
-What they can't do — yet — is follow a governed process.
+**qwen3.5** (20% success, 20% first pass) is the most striking result in the entire benchmark. It implemented correct code and passing tests in **8 out of 10 runs** — strong coding capability. But it only scored 20% success because it systematically refused to follow the governed process. The failure wasn't in its code; it was in its treatment of the governance layer as optional.
 
-Looking into the details, it gets interesting:
-
-**gemma4** (30% success, 30% first pass) implemented correct code and tests in 5 out of 10 runs. But it couldn't do so in the correct *order*. In multiple runs, it modified the test file during the "Implement solution" execution step — triggering Centian's invariant check and failing the run. The test file is frozen after scaffolding precisely to prevent this, and gemma4 kept violating that constraint. Looking at the reasoning logs, the model appeared to confuse itself across longer runs — likely compounded by the 64K context window limit and potential memory pressure on consumer hardware (MacBook M4, 48GB). At least two runs timed out at the 15-minute mark after the model entered loops of process errors, attempting to follow the workflow but lacking the reasoning depth or context to recover.
-
-**qwen3.5** (20% success, 20% first pass) is the most striking result in the entire benchmark. It implemented correct code and passing tests in **8 out of 10 runs**. Qwen3.5 *can code*! But it only scored 20% success because it systematically ignored, sometimes even refused to follow the outlined process.
-
-The failure pattern: qwen3.5 would encounter errors from Centian's task tools — typically when trying to advance steps out of order or ignoring requirements to complete steps (e.g. test file created but empty) — and instead of adjusting its approach, it would dismiss the errors entirely. The logs from two separate runs illustrate the pattern.
+The failure pattern: qwen3.5 would encounter errors from Centian's task tools — typically when trying to advance steps out of order or skip scaffolding — and instead of adjusting its approach, it would dismiss the errors entirely. The logs from two separate runs illustrate the pattern.
 
 In the first run, after several process errors, qwen3.5 attempts to complete a step it hasn't reached yet — and Centian rejects it:
 
@@ -270,24 +264,24 @@ This is an agent that can write code perfectly but actively reasons its way arou
 
 ### What this means
 
-The gap between gemma4 and qwen3.5 is instructive. gemma4 *tried* to follow the process but struggled with execution — context limits, reasoning depth, and hardware constraints got in the way. qwen3.5 *chose* not to follow the process, deciding that its own assessment of task completion was more valid than the governance framework's.
+The gap between gemma4 and qwen3.5 is instructive. gemma4 *tried* to follow the process but struggled with specific capabilities — translating a planned test into a working test, maintaining coherence across longer contexts, recovering from process errors. qwen3.5 *chose* not to follow the process, deciding that its own assessment of task completion was more valid than the governance framework's.
 
-Both are capability-compliance gaps, but they're different in kind. One is a limitation that might improve with better hardware and larger context windows. The other is a behavioral pattern that requires either fine-tuning for process adherence or — as this benchmark demonstrates — structural enforcement that doesn't rely on the model's cooperation.
+Both are capability-compliance gaps, but they're different in kind. gemma4's is a set of limitations that might improve with better hardware, larger context windows, or fine-tuning for structured workflows. qwen3.5's is a behavioral pattern that requires either explicit fine-tuning for process adherence or — as this benchmark demonstrates — structural enforcement that doesn't rely on the model's cooperation.
 
 Local open-source models are closer to production-ready than most people assume. But "can write correct code" and "can be trusted in a governed workflow" are different bars. As agents move into production environments where process matters — regulated industries, auditable workflows, team-based development — that distinction becomes the one that matters most.
 
 ---
 
 ## Conclusion
- 
+
 Ninety runs. Nine models. One governed workflow. The results are clear on the surface — flagship models dominate — but the deeper patterns are what matter.
- 
-**Process compliance is an independent axis from coding capability.** qwen3.5 proved this definitively: 8 out of 10 correct implementations, 20% success rate. A model that can write perfect code but refuses to follow a governed process is not production-ready, no matter how good its output looks. Without structural enforcement, every one of those runs would have been marked as a success.
- 
+
+**Process compliance is an independent axis from coding capability.** qwen3.5 proved this clearly: 8 out of 10 correct implementations, 20% success rate. A model that can write working code but refuses to follow a governed process is not production-ready, no matter how good its output looks. Without structural enforcement, most of those 8 correct implementations would have been marked as task successes — despite the model never actually completing the workflow.
+
 **The middle tier is where the interesting tradeoffs live.** gpt-5.4-mini matched flagships on success while being the fastest and cheapest — at the cost of efficiency. Claude Haiku never failed but rarely got it right the first time. Gemini Flash called tools flawlessly but stumbled on process governance. Each model has a profile that suits different use cases, and these profiles only become visible under structured evaluation.
- 
+
 **Local models are capable but not yet compliant.** gemma4 and qwen3.5 can both write working code. What they can't reliably do — yet — is work within a governed workflow. The gap is not in coding ability; it's in process understanding, context management, and willingness to treat external constraints as requirements rather than suggestions. As local inference hardware improves and models are fine-tuned for agentic workflows, this gap will narrow. But today, it's real.
- 
+
 **Tool calling is largely solved. Process compliance is not.** Only 16 MCP errors across 1,038 tool calls — a 1.5% error rate. Models know how to call tools. What they don't consistently know is *when* to call them, *in what order*, and *whether to respect the governance layer telling them to stop*. That's the problem space this benchmark is designed to measure.
  
 ### What's next
