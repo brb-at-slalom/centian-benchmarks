@@ -3,7 +3,7 @@
 set -euo pipefail
 
 CENTIAN_BIN="${CENTIAN_BIN:-$(command -v centian || true)}"
-SUITE_PATH="${SUITE_PATH:-tests/integrationtests/taskverification/benchmarks/centian_demo_v1}"
+SUITE_PATH="${SUITE_PATH:-benchmarks/centian_demo_v1}"
 REPEAT="${REPEAT:-10}"
 CODEX_CONFIG_PATH="${CODEX_CONFIG_PATH:-}"
 CENTIAN_CONFIG_PATH="${CENTIAN_CONFIG_PATH:-}"

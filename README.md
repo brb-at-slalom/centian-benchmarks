@@ -57,7 +57,7 @@ Supported script inputs:
 | Variable | Default | Effect |
 | --- | --- | --- |
 | `CENTIAN_BIN` | `$(command -v centian)` | Path to the `centian` executable. The script exits if this path is missing or not executable. |
-| `SUITE_PATH` | `tests/integrationtests/taskverification/benchmarks/centian_demo_v1` | Benchmark suite passed to `--suite`. The script exits if the directory does not exist. |
+| `SUITE_PATH` | `benchmarks/centian_demo_v1` | Benchmark suite passed to `--suite`. The script exits if the directory does not exist. |
 | `REPEAT` | `10` | Repeat count passed to `--repeat`. |
 | `CODEX_CONFIG_PATH` | empty | Passed as `--codex-config`, but only for `codex` and `codex-ollama` scenarios. Ignored for `claude` and `gemini`. |
 | `CENTIAN_CONFIG_PATH` | empty | Passed as `--centian-config` for every scenario when set. |
@@ -73,10 +73,10 @@ Behavior baked into the script:
 Example: override suite/config/template settings
 
 ```bash
-CODEX_CONFIG_PATH=/Users/brb/projects/centian-benchmarks/benchmarks/centian_demo_v1/agent_configs/codex_ollama_config.toml \
-CENTIAN_CONFIG_PATH=/Users/brb/projects/centian-benchmarks/benchmarks/centian_demo_v1/centian_config.json \
-TEMPLATE_DIRS="current=/Users/brb/projects/centian-benchmarks/task-templates/" \
-SUITE_PATH=/Users/brb/projects/centian-benchmarks/benchmarks/centian_demo_v1 \
+CODEX_CONFIG_PATH=./benchmarks/centian_demo_v1/agent_configs/codex_ollama_config.toml \
+CENTIAN_CONFIG_PATH=./benchmarks/centian_demo_v1/centian_config.json \
+TEMPLATE_DIRS="current=./task-templates/" \
+SUITE_PATH=./benchmarks/centian_demo_v1 \
 REPEAT=1 \
 ./run-centian-demo-v1-benchmarks.sh
 ```
@@ -85,12 +85,12 @@ Equivalent direct `centian benchmark run` shape for a single Codex Ollama scenar
 
 ```bash
 centian benchmark run \
-  --suite /Users/brb/projects/centian-benchmarks/benchmarks/centian_demo_v1 \
+  --suite ./benchmarks/centian_demo_v1 \
   --agent codex-ollama \
   --model qwen35-local \
   --repeat 1 \
   --timeout 30m \
-  --template-dir "current=/Users/brb/projects/centian-benchmarks/task-templates/" \
-  --codex-config /Users/brb/projects/centian-benchmarks/benchmarks/centian_demo_v1/agent_configs/codex_ollama_config.toml \
-  --centian-config /Users/brb/projects/centian-benchmarks/benchmarks/centian_demo_v1/centian_config.json
+  --template-dir "current=task-templates/" \
+  --codex-config benchmarks/centian_demo_v1/agent_configs/codex_ollama_config.toml \
+  --centian-config benchmarks/centian_demo_v1/centian_config.json
 ```
