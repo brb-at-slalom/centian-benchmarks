@@ -26,7 +26,7 @@ We wanted to measure the **capability** vs. **compliance** gap directly. So we b
 
 ## What we tested
 
-We took 9 agent/model combinations - spanning Claude (Haiku, Opus, Sonnet), OpenAI Codex (gpt-5.4, gpt-5.4-mini), local open-source models via Ollama (gemma4, qwen3.5), and Gemini (Flash, Pro) - and ran each through the same task 10 times. 90 total runs.
+We took 9 agent/model combinations - spanning Claude (Haiku, Opus, Sonnet), OpenAI Codex (gpt-5.4, gpt-5.4-mini), local open-source models via Codex + Ollama integration (gemma4, qwen3.5), and Gemini (Flash, Pro) - and ran each through the same task 10 times. 90 total runs.
 
 The task itself is straightforward: implement a small function using test-driven development. What makes this benchmark different is *how* the agent has to do it.
 
