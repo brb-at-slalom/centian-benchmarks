@@ -140,7 +140,7 @@ As mentioned above, we deliberately choose a simple coding task, which could be 
 
 **1st - Gemini Pro (120 / 61).** Earns its spot with a perfect run (Centian 11 / MCP 4) and the fewest total events in the benchmark - and by a notable margin on the MCP side. With only 61 tool calls across 10 runs (median 6 per run), Gemini Pro is remarkably economical. It gets in, does the work, and gets out. This is especially interesting given that it's the slowest API model by time - the low event count suggests it's not slow because it's doing too much, but because each step takes longer to reason through.
 
-**2nd - Claude Opus (116 / 68).** Opus almost achieved the theoretical minimum in 5 out of 10 runs. Opus typically made just 1 additional MCP call to self-correct before advancing the process - meaning it recognized a constraint issue and adjusted *before* triggering an error from Centian. That's a qualitative difference from models that barrel ahead and rely on error feedback to course-correct. Opus would have claimed the top spot overall if not for one outlier run with 3 mistakes and 27 tool calls.
+**2nd - Claude Opus (116 / 68).** Opus almost achieved the perfect run in 5 out of 10 runs. Opus typically made just 1 additional MCP call to self-correct before advancing the process - meaning it recognized a constraint issue and adjusted *before* triggering an error from Centian. That's a qualitative difference from models that barrel ahead and rely on error feedback to course-correct. Opus would have claimed the top spot overall if not for one outlier run with 3 mistakes and 27 tool calls.
 
 **3rd - Claude Sonnet (119 / 96).** Efficient on the Centian side (12 median, tied with most models) but notably more active on the MCP side - 96 total tool calls versus Opus's 68. Sonnet does more verification and exploration than Opus but stays clean on the process.
 
@@ -164,7 +164,7 @@ For this benchmark, the baseline Centian-to-MCP ratio of almost 3:1 - the task i
 
 When MCP calls push above that baseline while first pass stays at 100% - as with Codex gpt-5.4 (104 MCP) and gpt-5.4-mini (169 MCP) - the agent is making a deliberate tradeoff between efficiency and correctness. It re-reads files, re-runs tests, and verifies outputs before advancing. That's not waste - it's a strategy. And for gpt-5.4-mini, the inference speed is fast enough that the extra verification is essentially free in terms of wall-clock time.
 
-When MCP calls push above baseline and first pass drops - as with Haiku (106 MCP, 30% first pass) or qwen3.5 (190 MCP, 20% success) - the extra calls are not productive double-checking. They're the result of process failures, restarts, and in qwen3.5's case, an agent actively working outside the governed workflow.
+When MCP calls push above baseline and first pass drops - as with Haiku (106 MCP, 30% first pass) or qwen3.5 (190 MCP, 20% success) - the extra calls are not productive double-checking. They're the result of process failures, restarts, and in qwen3.5's case, an agent actively working outside the governed workflow, as we will see this is a intentional choice by the agent.
 
 ## Errors
 
@@ -183,7 +183,7 @@ Errors split the same way as events: Centian errors (process violations - wrong 
 
 **1st - Codex gpt-5.4 (4 / 0).** The cleanest execution in the benchmark. Just 4 process errors across 10 runs with a median of 0 - meaning most runs had zero errors of any kind. Zero MCP errors confirms that gpt-5.4 never once passed incorrect arguments to a tool call. Clean process, clean tool usage.
 
-**2nd - Claude Opus (7 / 0).** Also zero MCP errors and a median of 0. Opus's 7 total Centian errors are slightly higher than gpt-5.4, but the per-run picture is nearly identical - most runs are spotless, with errors concentrated in one or two outlier runs. Note: Opus would have tied Codexx GPT-5.4 if not for that one outlier run giving it 3 Centian errors.
+**2nd - Claude Opus (7 / 0).** Also zero MCP errors and a median of 0. Opus's 7 total Centian errors are slightly higher than gpt-5.4, but the per-run picture is nearly identical - most runs are spotless, with errors concentrated in one or two outlier runs. Note: Opus would have tied Codex GPT-5.4 if not for that one outlier run giving it 3 Centian errors.
 
 **3rd - Claude Sonnet (9 / 0).** A step behind Opus with 9 total process errors and a median of 1, meaning roughly half its runs had at least one process misstep. Still zero MCP errors - Sonnet never misused a tool.
 
@@ -205,7 +205,7 @@ This is where the error counts start telling a different story.
 
 A pattern emerges across all 9 models: **MCP errors are rare and limited to smaller models.** Only Haiku (5), gemma4 (5), gpt-5.4-mini (4), and qwen3.5 (2) produced any MCP errors at all. Every flagship model and both Gemini models achieved zero MCP tool call failures. This suggests that basic tool-calling competency - providing correct paths, valid arguments, well-formed commands - is largely solved across current-generation models.
 
-Centian errors are the differentiator. They measure something harder: can the agent understand and follow an externally imposed process? That's where the full spectrum shows up - from gpt-5.4's near-perfect 4 errors to qwen3.5's 126. The process layer is where models reveal whether they can be governed, not just capable.
+Centian errors are the differentiator. They measure something harder: can the agent understand and follow an externally imposed process? That's where the full spectrum shows up - from gpt-5.4's near-perfect 4 errors to qwen3.5's 126. The process layer is where models reveal whether they respect the process, or require active intervention when it comes to governance.
 
 ## Success Rate & First Pass
 
@@ -228,9 +228,9 @@ This is expected - but it's worth pausing on. These models didn't just write cor
 
 ### The middle tier: giving flagships a run for their money
 
-**Codex gpt-5.4-mini** is the standout result in this tier - and arguably the most practically interesting finding in the entire benchmark. It scored 100% success, 100% first pass, and posted the fastest median time of any model at 1 minute flat. It's not a flagship model, but it outperformed every flagship on speed while matching them on process compliance. The tradeoff: it's less step-efficient, using more total MCP events (122/169) than leaner models like Opus (116/68) or Gemini Pro (120/61). But at a significantly lower price point, that inefficiency is a rounding error. For teams optimizing for cost and speed in governed workflows, gpt-5.4-mini might be the most compelling option in this benchmark.
+**Codex gpt-5.4-mini** is the standout result in this tier - and one of the most practically interesting finding in the entire benchmark. It scored 100% success, 100% first pass, and posted the fastest median time of any model at 1 minute flat. It outperformed larger models on speed while matching them on process compliance. The tradeoff: it's less step-efficient, using more total MCP events (122/169) than leaner models like Opus (116/68) or Gemini Pro (120/61).
 
-**Gemini Flash** (gemini-3-flash-preview) reached 100% success but only 80% first pass. It always got there in the end, but 2 out of 10 runs needed recovery. This puts it in an interesting position - reliable enough to trust, but not quite clean enough for fully autonomous use.
+**Gemini Flash** (gemini-3-flash-preview) reached 100% success but only 80% first pass. It always got there in the end, but 2 out of 10 runs needed recovery. It is solid, but got outperformed by some other model in each category.
 
 **Claude Haiku** tells a similar but more pronounced story: 100% success, but only 30% first pass. It recovered every single time, but rarely got the process right on the first attempt. It needed the governance layer's restart mechanism to get there. Without Centian's structural enforcement, those 7 "messy" runs would have looked like 7 successes. With it, you can see exactly where the process broke down and how the model self-corrected.
 
@@ -306,4 +306,4 @@ This is the first round. The benchmark framework, task template, and all raw dat
 - **Community contributions.** If you run the benchmark on a model or hardware configuration we haven't tested, we want your results. The [centian-benchmarks](https://github.com/T4cceptor/centian-benchmarks) repository is set up to accept contributed runs.
 The full raw data, Centian configurations, Ollama Modelfiles, and reproduction instructions are available in the benchmark repository. Load the SQLite dump into Centian and explore the data yourself - per-run timelines, tool call histories, and step-level verification results are all there.
  
-→ [Centian](https://centian.ai?utm_source=benchmarks-article&utm_medium=referral&utm_campaign=agent-benchmark-2026) · [Benchmark Data & Reproduction](https://github.com/T4cceptor/centian-benchmarks)
+→ [Centian Repository](https://centian.ai?utm_source=benchmarks-article&utm_medium=referral&utm_campaign=agent-benchmark-2026) · [Benchmark Repository](https://github.com/T4cceptor/centian-benchmarks)
