@@ -1,40 +1,47 @@
 # centian-benchmarks
-Repository to store and evaluate agent benchmarks on centian templates.
+Raw benchmark data and reproduction assets for the governed-agent benchmark article ["Done!" — But Did Your Agent Actually Do the Work?](./index.md).
 
-[Whats centian?](https://github.com/T4cceptor/centian)
+Links:
+
+- [Centian repository](https://github.com/T4cceptor/centian)
+- [Article](./index.md)
+- [Benchmark data](./benchmarks/centian_demo_v1/results)
 
 ## Benchmarks
 
-- Centian TDD Workflow - [to benchmark](benchmarks/centian_demo_v1)
+- Guided TDD workflow: [benchmarks/centian_demo_v1](./benchmarks/centian_demo_v1)
 
 ## Getting started
 
 ### Dependencies
+
 - `centian` (`>=v0.4`) available on your `PATH`
-    - To install run: `curl -fsSL https://raw.githubusercontent.com/T4cceptor/centian/main/scripts/install.sh | bash`
+  - Install with `curl -fsSL https://raw.githubusercontent.com/T4cceptor/centian/main/scripts/install.sh | bash`
 - `node` (tested with `v24.2.0`) and `npx` (tested with `11.3.0`) available on your `PATH` - required to launch filesystem and shell MCP servers, and run tests
 - Claude Code, Gemini CLI, or OpenAI Codex installed and authenticated - Centian launches the selected agent in headless mode through its local CLI, so the demo will fail if that agent binary is missing or it's not signed in.
 - For `codex-ollama`, make sure local Ollama is running at `http://localhost:11434/v1`. Centian provides built-in `gemma4-local` and `qwen-local` Codex OSS profiles, and you can override the base Codex config with `--codex-config`.
 
-### Display data
+### Display benchmark data
 
-A quick and easy way to display the data provided in this repository and dive deeper into benchmark analytics:
+The repo already contains raw benchmark data from the article, including the SQLite dump at [benchmarks/centian_demo_v1/results](./benchmarks/centian_demo_v1/results). To inspect it in Centian:
+
 ```bash
 centian start --config-path src/static_centian_config.json
 ```
 
-### Run agents
+That view is useful if you want the same level of detail shown in the article: per-run timelines, tool call history, and step-level verification results.
 
-1. (Optional, but recommended) Adjust which scenarios will run
-   - Open `run-centian-demo-v1-benchmarks.sh`
-   - At the end of the file, comment or uncomment the `run_scenario ...` lines for the agent/model combinations you want
+### Run benchmarks
 
-2. Runs all agents configured in the script:
+The article benchmarks use [run-centian-demo-v1-benchmarks.sh](./run-centian-demo-v1-benchmarks.sh). Before running it, open the script and comment or uncomment the `run_scenario ...` lines at the end to choose the agent/model combinations you want.
+
+Run the configured scenarios:
+
 ```bash
 ./run-centian-demo-v1-benchmarks.sh
 ```
 
-Run single benchmark:
+Run a single benchmark directly:
 
 ```bash
 centian benchmark run \
@@ -48,11 +55,11 @@ centian benchmark run \
 - `--model`: use a valid model/profile for the selected agent, for example `haiku`, `sonnet`, `opus`, `gpt-5.4`, `gpt-5.4-mini`, `gemini-3-flash-preview`, or a local Ollama-backed profile such as `qwen35-local`
 
 
-## Advanced runs
+## Helpful info for benchmark runs
 
 `run-centian-demo-v1-benchmarks.sh` does not accept its own CLI flags. Instead, it builds a `centian benchmark run` command from environment variables and from the uncommented `run_scenario` calls at the end of the script.
 
-Supported script inputs:
+Useful script inputs:
 
 | Variable | Default | Effect |
 | --- | --- | --- |
@@ -63,12 +70,14 @@ Supported script inputs:
 | `CENTIAN_CONFIG_PATH` | empty | Passed as `--centian-config` for every scenario when set. |
 | `TEMPLATE_DIRS` | empty | Comma-separated list of template-dir values. Each non-empty entry becomes its own `--template-dir <value>` flag. |
 
-Behavior baked into the script:
+Good to know:
 
 - Every scenario always uses `--timeout 30m`.
 - Agent/model pairs are defined by the `run_scenario "<label>" "<agent>" "<model>"` lines at the bottom of the script.
 - Only uncommented scenarios run.
 - There is no script-level reasoning-effort option. For Codex runs, use a preconfigured `CODEX_CONFIG_PATH` if you need that behavior.
+- The benchmark from the article is a governed TDD workflow. Success is not just “tests pass”; the agent also has to follow the workflow contract enforced by Centian.
+- Local Ollama-backed runs are practical for reproduction, but based on the article results they are much slower than API-backed runs on consumer hardware.
 
 Example: override suite/config/template settings
 
