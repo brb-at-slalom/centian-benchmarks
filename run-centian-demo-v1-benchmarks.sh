@@ -89,7 +89,8 @@ fi
 #run_scenario "codex / gpt-5.4-mini" "codex" "gpt-5.4-mini"
 
 #run_scenario "codex-ollama / gemma4" "codex-ollama" "gemma4-local"
-run_scenario "codex-ollama / qwen35" "codex-ollama" "qwen35-local"
+#run_scenario "codex-ollama / qwen35" "codex-ollama" "qwen35-local"
+run_scenario "codex-ollama / qwen35" "codex-ollama" "qwen36-local"
 
 echo
 echo "All benchmark scenarios finished."
