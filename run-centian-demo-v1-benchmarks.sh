@@ -5,9 +5,9 @@ set -euo pipefail
 CENTIAN_BIN="${CENTIAN_BIN:-$(command -v centian || true)}"
 SUITE_PATH="${SUITE_PATH:-benchmarks/centian_demo_v1}"
 REPEAT="${REPEAT:-10}"
-CODEX_CONFIG_PATH="${CODEX_CONFIG_PATH:-}"
-CENTIAN_CONFIG_PATH="${CENTIAN_CONFIG_PATH:-}"
-TEMPLATE_DIRS="${TEMPLATE_DIRS:-}"
+CODEX_CONFIG_PATH="${CODEX_CONFIG_PATH:-benchmarks/centian_demo_v1/agent_configs/codex_ollama_config.toml}"
+CENTIAN_CONFIG_PATH="${CENTIAN_CONFIG_PATH:-benchmarks/centian_demo_v1/centian_config.json}"
+TEMPLATE_DIRS="${TEMPLATE_DIRS:-current=task-templates}"
 
 run_scenario() {
   local label="$1"
@@ -24,10 +24,15 @@ run_scenario() {
     run
     --suite "${SUITE_PATH}"
     --agent "${agent}"
-    --model "${model}"
+    # --model "${model}"
     --repeat "${REPEAT}"
     --timeout 30m
   )
+  if [[ ( "${agent}" == "codex-ollama" ) ]]; then
+    cmd+=(--profile "${model}")
+  else
+    cmd+=(--model "${model}")
+  fi
 
   if [[ ( "${agent}" == "codex" || "${agent}" == "codex-ollama" ) && -n "${CODEX_CONFIG_PATH}" ]]; then
     cmd+=(--codex-config "${CODEX_CONFIG_PATH}")
